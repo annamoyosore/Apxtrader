@@ -1,49 +1,36 @@
 import { useEffect, useState } from "react";
-import PairCard from "../components/PairCard";
-import { getPrice } from "../lib/forexApi";
+
+import Navbar from "../components/Navbar";
+import TradingChart from "../components/TradingChart";
+import TradePanel from "../components/TradePanel";
+
+import { getCurrentUser } from "../auth";
 
 export default function Dashboard() {
-  const [prices, setPrices] = useState({});
-
-  const pairs = [
-    "EUR/USD",
-    "GBP/USD",
-    "USD/JPY",
-    "XAU/USD"
-  ];
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    async function loadPrices() {
-      const updated = {};
-
-      for (const pair of pairs) {
-        const data = await getPrice(pair);
-
-        updated[pair] = data.price;
-      }
-
-      setPrices(updated);
-    }
-
-    loadPrices();
-
-    const interval = setInterval(loadPrices, 5000);
-
-    return () => clearInterval(interval);
+    getCurrentUser().then(setUser);
   }, []);
 
   return (
-    <div className="container">
-      <h1>Market</h1>
+    <div>
+      <Navbar />
 
-      <div className="grid">
-        {pairs.map((pair) => (
-          <PairCard
-            key={pair}
-            pair={pair}
-            price={prices[pair] || "Loading..."}
-          />
-        ))}
+      <div className="dashboard">
+        <div className="chart-area">
+          <TradingChart />
+        </div>
+
+        <div className="trade-area">
+          <h2>
+            Welcome {user?.name}
+          </h2>
+
+          <h3>Balance: $10,000</h3>
+
+          <TradePanel />
+        </div>
       </div>
     </div>
   );
