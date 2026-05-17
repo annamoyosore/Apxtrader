@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
+import { logoutUser } from "../auth";
 
 export default function Navbar() {
   return (
-    <div className="nav">
-      <h2>Apex Trader</h2>
+    <nav className="navbar">
+      <h2>ApexTrader</h2>
 
-      <div className="links">
+      <div>
         <Link to="/">Dashboard</Link>
         <Link to="/wallet">Wallet</Link>
+
+        <button onClick={logoutUser}>
+          Logout
+        </button>
       </div>
-    </div>
+    </nav>
   );
 }
