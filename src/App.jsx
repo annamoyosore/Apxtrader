@@ -1,19 +1,43 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Wallet from "./pages/Wallet";
-import Trade from "./pages/Trade";
-import Navbar from "./components/Navbar";
+
+// Simple auth guard
+const isLoggedIn = () => {
+  return localStorage.getItem("cookieFallback") !== null;
+};
 
 export default function App() {
   return (
-    <div>
-      <Navbar />
+    <Routes>
+      {/* Default route */}
+      <Route
+        path="/"
+        element={
+          isLoggedIn() ? (
+            <Dashboard />
+          ) : (
+            <Navigate to="/auth" />
+          )
+        }
+      />
 
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/trade/:pair" element={<Trade />} />
-      </Routes>
-    </div>
+      {/* Auth page (Login/Register) */}
+      <Route path="/auth" element={<Auth />} />
+
+      {/* Wallet (protected) */}
+      <Route
+        path="/wallet"
+        element={
+          isLoggedIn() ? (
+            <Wallet />
+          ) : (
+            <Navigate to="/auth" />
+          )
+        }
+      />
+    </Routes>
   );
 }
