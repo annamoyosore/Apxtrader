@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 export default function Wallet() {
-  const [balance, setBalance] = useState(10000);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("demoBalance");
-
-    if (saved) {
-      setBalance(Number(saved));
-    }
-  }, []);
-
   return (
-    <div className="container">
-      <h1>Demo Wallet</h1>
+    <div>
+      <Navbar />
 
-      <div className="wallet-box">
-        <h2>${balance.toFixed(2)}</h2>
+      <div className="wallet-page">
+        <h1>Wallet</h1>
+
+        <div className="wallet-card">
+          <h2>Deposit</h2>
+          <button>Deposit Funds</button>
+        </div>
+
+        <div className="wallet-card">
+          <h2>Withdraw</h2>
+          <button>Withdraw Funds</button>
+        </div>
       </div>
     </div>
   );
