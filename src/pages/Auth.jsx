@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { account } from "./lib/appwrite";
+import { account, ID } from "./lib/appwrite";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function Auth() {
 
   // REGISTER
   const register = async () => {
-    await account.create("unique()", email, password, name);
+    await account.create(ID.unique(), email, password, name);
     await account.createEmailPasswordSession(email, password);
   };
 
@@ -32,7 +32,8 @@ export default function Auth() {
         await register();
       }
 
-      navigate("/");
+      // IMPORTANT: always go dashboard, NOT "/"
+      navigate("/dashboard");
     } catch (err) {
       alert(err.message);
     }
